@@ -27,8 +27,12 @@ void ADC122S101_Init(SPI_HandleTypeDef * hspi, GPIO_TypeDef* GPIOx, uint16_t GPI
 float ADC122S101_get_channel_voltage(uint16_t channel)
 {
 	uint8_t txBuf[2] = {0,0};
-	txBuf[0] = channel << 3;
 	uint8_t rxBuf[2] = {0};
+
+	if (channel < 3) {
+		txBuf[0] = channel << 3;
+	} // Not allowed to pass more than 2. The output signal at the DOUT pin is indeterminate if ADD1 is high.
+
 	uint16_t local_channel_binary_voltage = 0;
 	float local_channel_voltage = 0;
 
